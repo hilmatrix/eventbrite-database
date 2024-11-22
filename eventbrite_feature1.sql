@@ -19,7 +19,7 @@ create table events (
 	user_id bigint references users(user_id),
 	is_active boolean not null default false,
 	name varchar(100) not null,
-	price numeric(10,5) not null default 0,
+	price numeric(10,12) not null default 0,
 	date date not null, 
 	time time not null,
 	location varchar(100) not null,
@@ -51,14 +51,18 @@ create table promotions (
 create table trx (
 	trx_id bigserial constraint trx_pk primary key, 
 	event_id bigint references events(event_id),
+	user_id bigint references users(user_id),
 	ticket_amount int not null,
 	total_price numeric(10,5) not null default 0,
-	promo_id bigint references promotions(promo_id),
-	referral_code_used varchar(50),
 	created_at timestamp with time zone default CURRENT_TIMESTAMP not null,
 	updated_at timestamp with time zone default CURRENT_TIMESTAMP not null,
 	deleted_at timestamp with time zone
 );
+
+create table trx_promo (
+	trx_id bigint references trx(trx_id),
+	promo_id bigint references promotions(promo_id)
+)
 
 create table reviews_ratings (
 	review_rating_id bigserial constraint review_rating_px primary key, 
